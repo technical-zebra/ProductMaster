@@ -27,4 +27,6 @@ ProductMaster is a robust product management website developed using ASP.NET MVC
 
 ## Create Supplier
 ![6](https://user-images.githubusercontent.com/108368506/221858948-bd59be61-7a15-4ee9-a757-e9dbce167c61.PNG)
+
+## Select Supplier
 ![9](https://user-images.githubusercontent.com/108368506/221858951-86eeb2be-7afe-445e-a2e0-8fb19835573f.PNG)
