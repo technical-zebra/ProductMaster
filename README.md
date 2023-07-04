@@ -1,8 +1,7 @@
 
-Tour of the project
-[https://youtu.be/_rARWnbeYuI](https://www.youtube.com/watch?v=_rARWnbeYuI)
+# ProductMaster
 
-This is a product management website built with ASP.NET MVC, Entity Framework, and Microsoft SQL. It features a product table with editing, deletion, and search capabilities. The website uses server-side paging and ValidationAttributes to improve functionality and ensure data validation, and repositories for efficient data management. Additionally, Chart.js is utilized to create a graphical representation of product data.
+ProductMaster is a robust product management website developed using ASP.NET MVC, Entity Framework, and Microsoft SQL. It includes a comprehensive product table with advanced features such as editing, deletion, and search functionalities. To enhance performance and ensure data validation, the website incorporates server-side paging and utilizes ValidationAttributes. Moreover, efficient data management is achieved through the implementation of repositories. To provide a visual representation of product data, Chart.js is employed to create appealing and informative graphs.
 
 
 ![11](https://user-images.githubusercontent.com/108368506/221858926-fa9d6ad7-7a37-4be7-9935-408b94b4b033.PNG)
