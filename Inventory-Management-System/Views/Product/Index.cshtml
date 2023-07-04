@@ -1,0 +1,351 @@
+﻿
+<link href="/css/Product/Index.css" rel="stylesheet" asp-append-version="true" />
+
+@model IndexDataProduct
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1>Products List</h1>
+</div>
+<link href="/css/Product/Index.css" rel="stylesheet" />
+@{
+    //prevPageIndex , nextPageIndex
+    int prevPageIndex = Model.id - 1;
+    int nextPageIndex;
+    if (Model.id == 0)
+    {
+        nextPageIndex = 2;<span aria-hidden="true"> </span>
+    }
+    else
+    {
+        nextPageIndex = Model.id + 1;
+    }
+}
+<div class="database-actions">
+    <div class="search-container">
+        <input id="searchInput" class="form-control  mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <a href="/Product?id=@Model.id&showNum=@Model.showNum" id="searchButton" class="btn btn-md btn-outline-success my-2 my-sm-0">Search</a>
+    </div>
+   
+   <div class="create-buttons">
+        <a class="btn btn-md btn-outline-primary">Creat New Category</a>
+        <a class="btn btn-md  btn-outline-primary">Creat New Supplier</a>
+        <a class="btn btn-md btn-primary" asp-action="CreateProduct" asp-controller="Product">Creat New Product</a>
+    </div>
+</div>
+
+
+<div class="navigation">
+
+    <div class="arrows">
+        @if (Model.id > 1)
+        {
+            <a class="btn page-link " asp-controller="Product" asp-action="Index" asp-route-id="@prevPageIndex" asp-route-showNum="@Model.showNum">
+                <span aria-hidden="true"> &lt </span>
+            </a>
+
+        }
+        else
+        {
+            <a class="btn page-link disabled" disabled>
+                <span aria-hidden="true"> &lt </span>
+            </a>
+        }
+
+        <p id="currentIndex">@Model.id</p>
+
+        @if (Model.id < Model.maxPageIndex)
+        {
+            <a class="btn page-link" asp-controller="Product" asp-action="Index" asp-route-id="@nextPageIndex" asp-route-showNum="@Model.showNum">
+                <span aria-hidden="true">></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn page-link disabled" disabled>
+                <span aria-hidden="true">></span>
+            </a>
+        }
+    </div>
+
+
+    <select title="viewDropDown" id="viewDropDown">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        
+    </select>
+
+</div>
+
+
+  <table
+      style="width: 100%; caption-side: bottom"
+      id="ct-2efd2e3c-4e00-11ec-a93d-b34dba1f0acd"
+      class="table table-striped dataTable no-footer dtr-column"
+      aria-describedby="ct-2efd2e3c-4e00-11ec-a93d-b34dba1f0acd_info"
+    >
+      <thead>
+        <tr role="row">
+
+             
+            <th style="width: 110px">
+                Name
+            </th>
+
+            <th style="width: 280px">
+                Description
+            </th>
+
+            <th style="width: 50px">
+                Price
+            </th>
+
+            <th style="width: 50px">
+                Quantity
+            </th>
+
+            <th style="width: 70px">
+                Code
+            </th>
+             <th style="width: 100px">
+                Supplier
+            </th>
+            <th style="width: 50px">
+                Category
+            </th>
+            <th style="width: 0px">
+                Actions
+            </th>
+            
+
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model.products)
+        {
+           
+            <tr>
+                <td >  @item.Name</td>
+                <td >
+                   
+                     @item.Description
+                </td>
+                <td >
+                   
+                     @item.Price
+                </td>
+                <td >
+                    @item.Quantity
+                </td>
+                <td >@item.ProductCode</td>
+                <td>
+                    <a class="nav-link text-dark" asp-controller="SupplierDetail" asp-action="Index" asp-route-id="@item.SupplierId" asp-route-showNum="@Model.showNum">
+
+                        @{
+
+                            var supplierName = "";
+                            if (Model.suppliers != null && item != null && item.SupplierId != null)
+                            {
+                                var supplier = Model.suppliers.FirstOrDefault(a => a.SupplierId == item.SupplierId);
+                                if (supplier != null && supplier.Name != null)
+                                {
+                                    supplierName = supplier.Name;
+                                }
+                                else
+                                {
+                                    supplierName = "Supplier Deleted";
+                                }
+                            }
+
+                       }
+                        @supplierName
+                        
+                    </a>
+                   
+                </td>
+                <td >
+                    <a class="nav-link text-dark"> 
+                        @{
+                            var categoryName = Model.categories.FirstOrDefault(a => a.CategoryId == item?.CategoryId).Name;
+                        }
+                        @categoryName
+                    </a>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-around ">
+                        <a asp-action="EditProduct" asp-controller="Product" asp-route-id="@item.ProductId"> <i class="fa-solid fa-pen-to-square"></i></a>
+
+
+                        <a asp-action="DeleteProduct" asp-controller="Product" asp-route-productId="@item.ProductId" asp-route-id="@Model.id" asp-route-searchInput="@Model.searchInput" asp-route-showNum="@Model.showNum"><i class="fa-sharp fa-solid fa-trash"></i></a>
+                    </div>
+                  </td>
+                
+            </tr>
+            
+        }
+
+      </tbody>
+    </table>
+
+<nav class="d-flex justify-content-center align-items-center" aria-label="Page navigation example">
+    <ul class="pagination">
+
+        <li class="page-item">
+            @{
+                if (Model.id == 0 || Model.id == 1)
+                {
+                    <span class="btn page-link disabled arrow" disabled aria-hidden="true">First</span>
+                }
+                else
+                {
+                    <a class="btn page-link" asp-controller="Product" asp-action="Index" asp-route-id="1" asp-route-showNum="@Model.showNum">
+                        <span aria-hidden="true">First</span>
+                    </a>
+                }
+            }
+
+        </li>
+
+        
+
+        <li class="page-item">
+            @if (Model.id > 1)
+            {
+                <a class="btn page-link" asp-controller="Product" asp-action="Index" asp-route-id="@prevPageIndex" asp-route-showNum="@Model.showNum">
+                    <span aria-hidden="true">&lt</span>
+                </a>
+
+            }
+            else
+            {
+                <a class="btn page-link disabled" disabled>
+                    <span aria-hidden="true">&lt</span>
+                </a>
+            }
+        </li>
+
+        @{
+
+            if (Model.id >= 5)
+            {
+                var b = Model.id - 5;
+                for (int i = 5; i != 1; i--)
+                {
+
+                    b = b + 1;
+                    <a class="btn page-link arrow" asp-controller="Product" asp-action="Index" asp-route-id="@b" asp-route-showNum="@Model.showNum">@b</a>
+
+                }
+            }
+            else if (Model.id != 0 || Model.id != 1)
+            {
+                for (int i = 1; i < Model.id; i++)
+                {
+                    <a class="btn page-link arrow" asp-controller="Product" asp-action="Index" asp-route-id="@i" asp-route-showNum="@Model.showNum">@i</a>
+                }
+            }
+
+        }
+
+
+        @{
+            int currentIndex;
+            if (Model.id == 0)
+            {
+                currentIndex = 1;
+            }
+            else
+            {
+                currentIndex = Model.id;
+            }
+
+        }
+
+        <li class="page-item active"><a class="page-link" href="#">@currentIndex</a></li>
+
+
+
+       
+        @{
+            var a = Model.id;
+            if (Model.maxPageIndex - Model.id >= 5)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    if (a == 0)
+                    {
+                        a = 1;
+                    }
+                    a = a + 1;
+                    <a class="btn page-link arrow" asp-controller="Product" asp-action="Index" asp-route-id="@a" asp-route-showNum="@Model.showNum">@a</a>
+
+                }
+            }
+            else
+            {
+
+                if (Model.id != Model.maxPageIndex)
+                {
+                    for (int i = 0; i < Model.maxPageIndex - Model.id; i++)
+                    {
+                        a = a + 1;
+                        <a class="btn page-link" asp-controller="Product" asp-action="Index" asp-route-id="@nextPageIndex" asp-route-showNum="@Model.showNum">@a</a>
+
+                    }
+                }
+               
+                
+            }
+
+
+        }
+
+        <li class="page-item">
+            @if (Model.id < Model.maxPageIndex)
+            {
+                <a class="btn page-link" asp-controller="Product" asp-action="Index" asp-route-id="@nextPageIndex" asp-route-showNum="@Model.showNum">
+                    <span aria-hidden="true">></span>
+                </a>
+            }
+            else
+            {
+                <a class="btn page-link disabled" disabled>
+                    <span aria-hidden="true">></span>
+                </a>
+            }
+        </li>
+
+        <li class="page-item">
+
+            @{
+                if (Model.id == Model.maxPageIndex)
+                {
+
+                    <span class="btn page-link disabled arrow" disabled aria-hidden="true">Last</span>
+
+                }
+                else
+                {
+                    <a class="btn page-link" asp-controller="Product" asp-action="Index" asp-route-id="@Model.maxPageIndex" asp-route-showNum="@Model.showNum">
+                        <span aria-hidden="true">Last</span>
+                    </a>
+                }
+            }
+
+
+        </li>
+
+    </ul>
+</nav>
+
+<script src="/js/Product/Indexx.js"></script>
+
+
+
+
+
+
+
+ 
+
